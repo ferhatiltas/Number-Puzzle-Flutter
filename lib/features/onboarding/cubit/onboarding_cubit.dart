@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../core/constants/app_consts.dart';
-import '../../../core/constants/svg_constants.dart';
+import '../../../core/constants/image_constants.dart';
 import '../model/onboarding_model.dart';
 import 'onboarding_state.dart';
 
@@ -21,15 +21,15 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       OnboardingModel(
           title: ApplicationConstants.instance.onboardTitle1,
           description: ApplicationConstants.instance.onboardDescription1,
-          imagePath: SvgConstants.instance.onboard1),
+          imagePath: ImageConstants.instance.onboard1),
       OnboardingModel(
           title: ApplicationConstants.instance.onboardTitle2,
           description: ApplicationConstants.instance.onboardDescription2,
-          imagePath: SvgConstants.instance.onboard2),
+          imagePath: ImageConstants.instance.onboard2),
       OnboardingModel(
           title: ApplicationConstants.instance.onboardTitle3,
           description: ApplicationConstants.instance.onboardDescription3,
-          imagePath: SvgConstants.instance.onboard3),
+          imagePath: ImageConstants.instance.onboard3),
     ];
   }
 
