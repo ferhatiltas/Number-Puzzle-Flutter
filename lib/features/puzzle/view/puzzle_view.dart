@@ -1,6 +1,12 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../core/constants/image_constants.dart';
+import '../../../widgets/sizedBox/dynamic_veritical_space.dart';
+import '../model/math_model.dart';
 
 class PuzzleView extends StatefulWidget {
   const PuzzleView({super.key});
@@ -20,6 +26,8 @@ class _PuzzleViewState extends State<PuzzleView> {
   var indexColor = Colors.white;
   bool isFirsLoad = true;
   String selectedLastNumber = '';
+  List<MathModel> mathModelList = [];
+  List<MathModel> mathModelList2 = [];
   @override
   void initState() {
     super.initState();
@@ -58,30 +66,140 @@ class _PuzzleViewState extends State<PuzzleView> {
     if (isFirsLoad) {
       isFirsLoad = false;
     }
+    for (var i = 0; i < 3; i++) {
+      mathModelList.add(MathModel(number1: random.nextInt(9) + 1, number2: random.nextInt(9) + 1, number3: random.nextInt(9) + 1));
+      mathModelList2.add(MathModel(number1: random.nextInt(9) + 1, number2: random.nextInt(9) + 1, number3: random.nextInt(9) + 1));
+      if (mathModelList[i].number1 % 10 > 5) {
+        while (mathModelList[i].number1 * mathModelList[i].number2 < mathModelList[i].number3) {
+          mathModelList[i].number3 = random.nextInt(9) + 1;
+        }
+        if ((mathModelList[i].number1 * mathModelList[i].number2) - mathModelList[i].number3 < 10 &&
+            (mathModelList[i].number1 * mathModelList[i].number2) + mathModelList[i].number3 < 10) {
+          mathModelList[i].number3 = mathModelList[i].number3 * 10;
+        }
+      } else {
+        while (mathModelList[i].number1 % mathModelList[i].number2 != 0) {
+          mathModelList[i].number1 = random.nextInt(9) + 1;
+          mathModelList[i].number2 = random.nextInt(9) + 1;
+        }
+        while (mathModelList[i].number1 / mathModelList[i].number2 < mathModelList[i].number3) {
+          mathModelList[i].number3 = random.nextInt(9) + 1;
+        }
+        if ((mathModelList[i].number1 / mathModelList[i].number2) - mathModelList[i].number3 < 10 &&
+            (mathModelList[i].number1 / mathModelList[i].number2) + mathModelList[i].number3 < 10) {
+          mathModelList[i].number3 = mathModelList[i].number3 * 10;
+        }
+      }
+
+      if (mathModelList2[i].number1 % 10 > 5) {
+        while (mathModelList2[i].number1 * mathModelList2[i].number2 < mathModelList2[i].number3) {
+          mathModelList2[i].number3 = random.nextInt(9) + 1;
+        }
+        if ((mathModelList2[i].number1 * mathModelList2[i].number2) - mathModelList2[i].number3 < 10 &&
+            (mathModelList2[i].number1 * mathModelList2[i].number2) + mathModelList2[i].number3 < 10) {
+          mathModelList2[i].number3 = mathModelList2[i].number3 * 10;
+        }
+      } else {
+        while (mathModelList2[i].number1 % mathModelList2[i].number2 != 0) {
+          mathModelList2[i].number1 = random.nextInt(9) + 1;
+          mathModelList2[i].number2 = random.nextInt(9) + 1;
+        }
+        while (mathModelList2[i].number1 / mathModelList2[i].number2 < mathModelList2[i].number3) {
+          mathModelList2[i].number3 = random.nextInt(9) + 1;
+        }
+        if ((mathModelList2[i].number1 / mathModelList2[i].number2) - mathModelList2[i].number3 < 10 &&
+            (mathModelList2[i].number1 / mathModelList2[i].number2) + mathModelList2[i].number3 < 10) {
+          mathModelList2[i].number3 = mathModelList2[i].number3 * 10;
+        }
+      }
+    }
   }
 
   Widget _buildBody() {
     int gridStateLength = gridState.length;
-    return Column(children: <Widget>[
-      AspectRatio(
-        aspectRatio: 1.0,
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: GridView.builder(
-            key: gridKey,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: gridStateLength,
-              //childAspectRatio: 8.0 / 11.9
-            ),
-            itemBuilder: _buildGridItems,
-            itemCount: gridStateLength * gridStateLength,
+    return SingleChildScrollView(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          width: 100.w,
+          height: 150,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 100.w - 170,
+                child: Text(
+                  'Soruların tabloda gizlenmiş olan \ncevaplarını bakalım bulabilecek misiniz?\nCevapları bulduğunuz zaman ilgili \nkareleri sürükleme ile seçiniz.',
+                ),
+              ),
+              Image.asset(
+                ImageConstants.instance.example,
+                height: 150,
+                width: 150,
+              )
+            ],
           ),
         ),
-      ),
-      Text(gridState0.toString()),
-      Text(selectedNumbers.toString()),
-      Text(selectedLastNumber.toString()),
-    ]);
+        AspectRatio(
+          aspectRatio: 1.0,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            child: GridView.builder(
+              key: gridKey,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: gridStateLength,
+              ),
+              itemBuilder: _buildGridItems,
+              itemCount: gridStateLength * gridStateLength,
+            ),
+          ),
+        ),
+        DynamicVerticalSpace(height: 1.h),
+
+        SizedBox(
+          height: 10.h,
+          child: ListView.builder(
+              itemCount: mathModelList.length,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                var operator1 = mathModelList[index].number1 % 10 > 5 ? '*' : '/';
+                var operator2 = mathModelList[index].number2 % 10 < 5 ? '+' : '-';
+                var number1 = mathModelList[index].number1.toString();
+                var number2 = mathModelList[index].number2.toString();
+                var number3 = mathModelList[index].number3.toString();
+
+                var operator12 = mathModelList2[index].number1 % 10 > 5 ? '*' : '/';
+                var operator22 = mathModelList2[index].number2 % 10 < 5 ? '+' : '-';
+                var number12 = mathModelList2[index].number1.toString();
+                var number22 = mathModelList2[index].number2.toString();
+                var number32 = mathModelList2[index].number3.toString();
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text('(' + number1 + ' ' + operator1 + ' ' + number2 + ')' + ' ' + operator2 + ' ' + number3, style: TextStyle(fontSize: 20)),
+                    Text('(' + number12 + ' ' + operator12 + ' ' + number22 + ')' + ' ' + operator22 + ' ' + number32,
+                        style: TextStyle(fontSize: 20)),
+                  ],
+                );
+              }),
+        ),
+
+        DynamicVerticalSpace(height: 1.h),
+
+        // Text(selectedLastNumber.toString()),
+        Align(
+            alignment: Alignment.center,
+            child: CupertinoButton.filled(
+                child: Text('Sonraki Oyun'),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PuzzleView()),
+                  );
+                }))
+      ]),
+    );
   }
 
   Widget _buildGridItems(BuildContext context, int index) {
@@ -193,17 +311,10 @@ class _PuzzleViewState extends State<PuzzleView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sayı Bulmaca'),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            _buildBody(),
-          ],
+        appBar: AppBar(
+          title: Text('Sayı Bulmaca'),
         ),
-      ),
-    );
+        body: _buildBody());
   }
 
   _gridItemTapped(int x, int y) {
