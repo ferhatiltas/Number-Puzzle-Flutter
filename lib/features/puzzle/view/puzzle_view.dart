@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class PuzzleView extends StatefulWidget {
@@ -8,25 +10,26 @@ class PuzzleView extends StatefulWidget {
 }
 
 class _PuzzleViewState extends State<PuzzleView> {
-  GlobalKey gridKey = new GlobalKey();
+  GlobalKey gridKey = GlobalKey();
+  var random = Random();
 
-  List<List<String>> gridState = [
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-  ];
+  List<List<String>> gridState = [[], [], [], [], [], [], [], [], []];
   var indexColor = Colors.white;
 
   @override
   void initState() {
     super.initState();
+    for (int i = 0; i <= 81; i++) {
+      gridState[0].add(random.nextInt(10).toString());
+      gridState[1].add(random.nextInt(10).toString());
+      gridState[2].add(random.nextInt(10).toString());
+      gridState[3].add(random.nextInt(10).toString());
+      gridState[4].add(random.nextInt(10).toString());
+      gridState[5].add(random.nextInt(10).toString());
+      gridState[6].add(random.nextInt(10).toString());
+      gridState[7].add(random.nextInt(10).toString());
+      gridState[8].add(random.nextInt(10).toString());
+    }
   }
 
   Widget _buildBody() {
@@ -81,7 +84,7 @@ class _PuzzleViewState extends State<PuzzleView> {
           gridState[indexX][indexY] = "";
         } else {
           gridState[indexX][indexY] = "Y";
-          indexColor = Colors.green;
+          indexColor = Colors.red;
         }
 
         setState(() {});
@@ -95,7 +98,10 @@ class _PuzzleViewState extends State<PuzzleView> {
       child: GridTile(
         key: gridItemKey,
         child: Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 0.5)),
+          decoration: BoxDecoration(
+            color: index % 2 == 0 ? Colors.grey.shade400 : Colors.white,
+            border: Border.all(color: Colors.black, width: 0.5),
+          ),
           child: Center(
             child: _buildGridItem(x, y),
           ),
@@ -117,18 +123,29 @@ class _PuzzleViewState extends State<PuzzleView> {
     int rowIndex = (gridPosition / (_boxItem as RenderBox).size.width).floor().toInt();
     int colIndex = ((details.globalPosition.dx - gridLeft) / _boxItem.size.width).floor().toInt();
     gridState[rowIndex][colIndex] = "Y";
-    indexColor = Colors.green;
-
+    indexColor = Colors.red;
     setState(() {});
   }
 
   Widget _buildGridItem(int x, int y) {
     switch (gridState[x][y]) {
       case '':
-        return Text('s');
+        return Text(
+          '6',
+          style: TextStyle(color: Colors.black, fontSize: 23),
+        );
       case 'Y':
+        print('object');
+
         return Container(
           color: indexColor,
+          width: 50,
+          height: 50,
+          child: Center(
+              child: Text(
+            '6',
+            style: TextStyle(color: Colors.white, fontSize: 23),
+          )),
         );
       case 'N':
         return Container(
@@ -143,7 +160,7 @@ class _PuzzleViewState extends State<PuzzleView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('widget.title'),
+        title: Text('Sayı Bulmaca'),
       ),
       body: Container(
         child: Column(
@@ -152,7 +169,6 @@ class _PuzzleViewState extends State<PuzzleView> {
           ],
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
