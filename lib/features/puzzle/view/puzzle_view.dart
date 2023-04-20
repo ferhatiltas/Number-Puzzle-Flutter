@@ -30,6 +30,7 @@ class _PuzzleViewState extends State<PuzzleView> {
   List<int> mathModelResultList = [];
   List<MathModel> mathModelList2 = [];
   List<int> mathModelResultList2 = [];
+  List<int> allResults = [];
   @override
   void initState() {
     super.initState();
@@ -69,14 +70,13 @@ class _PuzzleViewState extends State<PuzzleView> {
       isFirsLoad = false;
     }
     for (var i = 0; i < 3; i++) {
-      mathModelList.add(MathModel(number1: random.nextInt(9) + 1, number2: random.nextInt(9) + 1, number3: random.nextInt(9) + 1));
-      mathModelList2.add(MathModel(number1: random.nextInt(9) + 1, number2: random.nextInt(9) + 1, number3: random.nextInt(9) + 1));
+      mathModelList.add(MathModel(number1: random.nextInt(9) + 1, number2: random.nextInt(9) + 1, number3: random.nextInt(9) + 1, isFinded: false));
+      mathModelList2.add(MathModel(number1: random.nextInt(9) + 1, number2: random.nextInt(9) + 1, number3: random.nextInt(9) + 1, isFinded: false));
       calculateRandomNumbers(i);
     }
 
     resultsFunc();
     List<int> randomints = [];
-    List<int> allResults = [];
     allResults.addAll(mathModelResultList);
     allResults.addAll(mathModelResultList2);
     for (var i = 0; i < allResults.length; i++) {
@@ -132,6 +132,15 @@ class _PuzzleViewState extends State<PuzzleView> {
           (mathModelList[i].number1 * mathModelList[i].number2) + mathModelList[i].number3 < 10) {
         mathModelList[i].number3 = mathModelList[i].number3 * 10;
       }
+      var minus = mathModelList[i].number1 * mathModelList[i].number2 - mathModelList[i].number3;
+      var plus = mathModelList[i].number1 * mathModelList[i].number2 + mathModelList[i].number3;
+
+      if (minus.toString().split('').first == minus.toString().split('').last) {
+        mathModelList[i].number3 = mathModelList[i].number3 + 1;
+      }
+      if (plus.toString().split('').first == plus.toString().split('').last) {
+        mathModelList[i].number3 = mathModelList[i].number3 + 1;
+      }
     } else {
       while (mathModelList[i].number1 % mathModelList[i].number2 != 0) {
         mathModelList[i].number1 = random.nextInt(9) + 1;
@@ -143,6 +152,18 @@ class _PuzzleViewState extends State<PuzzleView> {
       if ((mathModelList[i].number1 / mathModelList[i].number2) - mathModelList[i].number3 < 10 &&
           (mathModelList[i].number1 / mathModelList[i].number2) + mathModelList[i].number3 < 10) {
         mathModelList[i].number3 = mathModelList[i].number3 * 10;
+      }
+
+      var bolu = int.parse((mathModelList[i].number1 / mathModelList[i].number2).toStringAsFixed(0));
+
+      var minus = bolu - mathModelList[i].number3;
+      var plus = (bolu) + mathModelList[i].number3;
+
+      if (minus.toString().split('').first == minus.toString().split('').last) {
+        mathModelList[i].number3 = mathModelList[i].number3 + 1;
+      }
+      if (plus.toString().split('').first == plus.toString().split('').last) {
+        mathModelList[i].number3 = mathModelList[i].number3 + 1;
       }
     }
 
@@ -231,9 +252,10 @@ class _PuzzleViewState extends State<PuzzleView> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text('(' + number1 + ' ' + operator1 + ' ' + number2 + ')' + ' ' + operator2 + ' ' + number3, style: TextStyle(fontSize: 20)),
+                    Text('(' + number1 + ' ' + operator1 + ' ' + number2 + ')' + ' ' + operator2 + ' ' + number3,
+                        style: TextStyle(fontSize: 20, color: mathModelList[index].isFinded ? Colors.green : Colors.black)),
                     Text('(' + number12 + ' ' + operator12 + ' ' + number22 + ')' + ' ' + operator22 + ' ' + number32,
-                        style: TextStyle(fontSize: 20)),
+                        style: TextStyle(fontSize: 20, color: mathModelList2[index].isFinded ? Colors.green : Colors.black)),
                   ],
                 );
               }),
@@ -289,7 +311,7 @@ class _PuzzleViewState extends State<PuzzleView> {
           gridState[indexX][indexY] = "Y";
           indexColor = Colors.red;
         }
-        findSelectedNumbers(true, indexX, indexY);
+        findSelectedNumbers(true, indexX, indexY );
         setState(() {});
       },
       onVerticalDragUpdate: (details) {
@@ -373,20 +395,25 @@ class _PuzzleViewState extends State<PuzzleView> {
 
   String lastNumber = '';
 
-  void findSelectedNumbers(bool isTap, int x, int y) {
-    if (isTap) {
+   findSelectedNumbers(bool isTap, int x, int y ) {
+    if (lastNumber != gridState0[x][y]) {
       selectedNumbers.add(gridState0[x][y]);
-      lastNumber = gridState0[x][y];
-    } else {
-      if (lastNumber != gridState0[x][y]) {
-        selectedNumbers.add(gridState0[x][y]);
-        var allNumber = '';
-        for (var i = 0; i < selectedNumbers.length; i++) {
-          allNumber = selectedNumbers[i] + allNumber;
-          selectedLastNumber = allNumber.split('').reversed.join();
+      var allNumber = '';
+      for (var i = 0; i < selectedNumbers.length; i++) {
+        allNumber = selectedNumbers[i] + allNumber;
+        selectedLastNumber = allNumber.split('').reversed.join();
+        if (mathModelResultList.contains(int.parse(selectedLastNumber))) {
+          setState(() {
+            mathModelList[mathModelResultList.indexOf(int.parse(selectedLastNumber))].isFinded = true;
+          });
+        }
+        if (mathModelResultList2.contains(int.parse(selectedLastNumber))) {
+          setState(() {
+            mathModelList2[mathModelResultList2.indexOf(int.parse(selectedLastNumber))].isFinded = true;
+          });
         }
       }
-      lastNumber = gridState0[x][y];
     }
+    lastNumber = gridState0[x][y];
   }
 }
