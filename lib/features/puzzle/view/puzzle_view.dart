@@ -27,7 +27,9 @@ class _PuzzleViewState extends State<PuzzleView> {
   bool isFirsLoad = true;
   String selectedLastNumber = '';
   List<MathModel> mathModelList = [];
+  List<int> mathModelResultList = [];
   List<MathModel> mathModelList2 = [];
+  List<int> mathModelResultList2 = [];
   @override
   void initState() {
     super.initState();
@@ -69,48 +71,100 @@ class _PuzzleViewState extends State<PuzzleView> {
     for (var i = 0; i < 3; i++) {
       mathModelList.add(MathModel(number1: random.nextInt(9) + 1, number2: random.nextInt(9) + 1, number3: random.nextInt(9) + 1));
       mathModelList2.add(MathModel(number1: random.nextInt(9) + 1, number2: random.nextInt(9) + 1, number3: random.nextInt(9) + 1));
+      calculateRandomNumbers(i);
+    }
+
+    resultsFunc();
+    List<int> randomints = [];
+    List<int> allResults = [];
+    allResults.addAll(mathModelResultList);
+    allResults.addAll(mathModelResultList2);
+    for (var i = 0; i < allResults.length; i++) {
+      var rnd = random.nextInt(8);
+      var rnd1 = random.nextInt(8);
+      while (randomints.contains(rnd) && randomints.contains(rnd1)) {
+        rnd = random.nextInt(8);
+        rnd1 = random.nextInt(8);
+      }
+      gridState0[rnd][rnd1] = allResults[i].toString().split("").first;
+      gridState0[rnd][rnd1 + 1] = allResults[i].toString().split("").last;
+      randomints.add(rnd);
+    }
+  }
+
+  void resultsFunc() {
+    for (var i = 0; i < mathModelList.length; i++) {
       if (mathModelList[i].number1 % 10 > 5) {
-        while (mathModelList[i].number1 * mathModelList[i].number2 < mathModelList[i].number3) {
-          mathModelList[i].number3 = random.nextInt(9) + 1;
-        }
-        if ((mathModelList[i].number1 * mathModelList[i].number2) - mathModelList[i].number3 < 10 &&
-            (mathModelList[i].number1 * mathModelList[i].number2) + mathModelList[i].number3 < 10) {
-          mathModelList[i].number3 = mathModelList[i].number3 * 10;
+        if (mathModelList[i].number2 % 10 < 5) {
+          mathModelResultList.add(mathModelList[i].number1 * mathModelList[i].number2 + mathModelList[i].number3);
+        } else {
+          mathModelResultList.add(mathModelList[i].number1 * mathModelList[i].number2 - mathModelList[i].number3);
         }
       } else {
-        while (mathModelList[i].number1 % mathModelList[i].number2 != 0) {
-          mathModelList[i].number1 = random.nextInt(9) + 1;
-          mathModelList[i].number2 = random.nextInt(9) + 1;
-        }
-        while (mathModelList[i].number1 / mathModelList[i].number2 < mathModelList[i].number3) {
-          mathModelList[i].number3 = random.nextInt(9) + 1;
-        }
-        if ((mathModelList[i].number1 / mathModelList[i].number2) - mathModelList[i].number3 < 10 &&
-            (mathModelList[i].number1 / mathModelList[i].number2) + mathModelList[i].number3 < 10) {
-          mathModelList[i].number3 = mathModelList[i].number3 * 10;
+        if (mathModelList[i].number2 % 10 < 5) {
+          mathModelResultList.add(int.parse((mathModelList[i].number1 / mathModelList[i].number2).toStringAsFixed(0)) + mathModelList[i].number3);
+        } else {
+          mathModelResultList.add(int.parse((mathModelList[i].number1 / mathModelList[i].number2).toStringAsFixed(0)) - mathModelList[i].number3);
         }
       }
-
       if (mathModelList2[i].number1 % 10 > 5) {
-        while (mathModelList2[i].number1 * mathModelList2[i].number2 < mathModelList2[i].number3) {
-          mathModelList2[i].number3 = random.nextInt(9) + 1;
-        }
-        if ((mathModelList2[i].number1 * mathModelList2[i].number2) - mathModelList2[i].number3 < 10 &&
-            (mathModelList2[i].number1 * mathModelList2[i].number2) + mathModelList2[i].number3 < 10) {
-          mathModelList2[i].number3 = mathModelList2[i].number3 * 10;
+        if (mathModelList2[i].number2 % 10 < 5) {
+          mathModelResultList2.add(mathModelList2[i].number1 * mathModelList2[i].number2 + mathModelList2[i].number3);
+        } else {
+          mathModelResultList2.add(mathModelList2[i].number1 * mathModelList2[i].number2 - mathModelList2[i].number3);
         }
       } else {
-        while (mathModelList2[i].number1 % mathModelList2[i].number2 != 0) {
-          mathModelList2[i].number1 = random.nextInt(9) + 1;
-          mathModelList2[i].number2 = random.nextInt(9) + 1;
+        if (mathModelList2[i].number2 % 10 < 5) {
+          mathModelResultList2.add(int.parse((mathModelList2[i].number1 / mathModelList2[i].number2).toStringAsFixed(0)) + mathModelList2[i].number3);
+        } else {
+          mathModelResultList2.add(int.parse((mathModelList2[i].number1 / mathModelList2[i].number2).toStringAsFixed(0)) - mathModelList2[i].number3);
         }
-        while (mathModelList2[i].number1 / mathModelList2[i].number2 < mathModelList2[i].number3) {
-          mathModelList2[i].number3 = random.nextInt(9) + 1;
-        }
-        if ((mathModelList2[i].number1 / mathModelList2[i].number2) - mathModelList2[i].number3 < 10 &&
-            (mathModelList2[i].number1 / mathModelList2[i].number2) + mathModelList2[i].number3 < 10) {
-          mathModelList2[i].number3 = mathModelList2[i].number3 * 10;
-        }
+      }
+    }
+  }
+
+  void calculateRandomNumbers(int i) {
+    if (mathModelList[i].number1 % 10 > 5) {
+      while (mathModelList[i].number1 * mathModelList[i].number2 < mathModelList[i].number3) {
+        mathModelList[i].number3 = random.nextInt(9) + 1;
+      }
+      if ((mathModelList[i].number1 * mathModelList[i].number2) - mathModelList[i].number3 < 10 &&
+          (mathModelList[i].number1 * mathModelList[i].number2) + mathModelList[i].number3 < 10) {
+        mathModelList[i].number3 = mathModelList[i].number3 * 10;
+      }
+    } else {
+      while (mathModelList[i].number1 % mathModelList[i].number2 != 0) {
+        mathModelList[i].number1 = random.nextInt(9) + 1;
+        mathModelList[i].number2 = random.nextInt(9) + 1;
+      }
+      while (mathModelList[i].number1 / mathModelList[i].number2 < mathModelList[i].number3) {
+        mathModelList[i].number3 = random.nextInt(9) + 1;
+      }
+      if ((mathModelList[i].number1 / mathModelList[i].number2) - mathModelList[i].number3 < 10 &&
+          (mathModelList[i].number1 / mathModelList[i].number2) + mathModelList[i].number3 < 10) {
+        mathModelList[i].number3 = mathModelList[i].number3 * 10;
+      }
+    }
+
+    if (mathModelList2[i].number1 % 10 > 5) {
+      while (mathModelList2[i].number1 * mathModelList2[i].number2 < mathModelList2[i].number3) {
+        mathModelList2[i].number3 = random.nextInt(9) + 1;
+      }
+      if ((mathModelList2[i].number1 * mathModelList2[i].number2) - mathModelList2[i].number3 < 10 &&
+          (mathModelList2[i].number1 * mathModelList2[i].number2) + mathModelList2[i].number3 < 10) {
+        mathModelList2[i].number3 = mathModelList2[i].number3 * 10;
+      }
+    } else {
+      while (mathModelList2[i].number1 % mathModelList2[i].number2 != 0) {
+        mathModelList2[i].number1 = random.nextInt(9) + 1;
+        mathModelList2[i].number2 = random.nextInt(9) + 1;
+      }
+      while (mathModelList2[i].number1 / mathModelList2[i].number2 < mathModelList2[i].number3) {
+        mathModelList2[i].number3 = random.nextInt(9) + 1;
+      }
+      if ((mathModelList2[i].number1 / mathModelList2[i].number2) - mathModelList2[i].number3 < 10 &&
+          (mathModelList2[i].number1 / mathModelList2[i].number2) + mathModelList2[i].number3 < 10) {
+        mathModelList2[i].number3 = mathModelList2[i].number3 * 10;
       }
     }
   }
@@ -317,21 +371,15 @@ class _PuzzleViewState extends State<PuzzleView> {
         body: _buildBody());
   }
 
-  _gridItemTapped(int x, int y) {
-    print("x is $x and Y is $y");
-  }
-
   String lastNumber = '';
 
   void findSelectedNumbers(bool isTap, int x, int y) {
     if (isTap) {
-      print('secilen sayi ${gridState0[x][y]}');
       selectedNumbers.add(gridState0[x][y]);
       lastNumber = gridState0[x][y];
     } else {
       if (lastNumber != gridState0[x][y]) {
         selectedNumbers.add(gridState0[x][y]);
-        print('secilen sayilar ${gridState0[x][y]}');
         var allNumber = '';
         for (var i = 0; i < selectedNumbers.length; i++) {
           allNumber = selectedNumbers[i] + allNumber;
