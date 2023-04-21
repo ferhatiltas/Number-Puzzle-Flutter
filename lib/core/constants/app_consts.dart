@@ -6,13 +6,13 @@ class ApplicationConstants {
   }
 
   ApplicationConstants._init();
-  final String onboardTitle1 = "Lorem başlık";
+  final String onboardTitle1 = "Matematiğiniz Geliştirin";
   final String onboardDescription1 =
-      "Bu bir denemedir yağlı şaka ünlü  çabuk consectetur. Egestas ut lectus velit feugiat eleifend eget.Lorem ipsum dolor sit amet consectetur. Egestas ut lectus velit eget.";
-  final String onboardTitle2 = "Lorem baslık";
+      "Uygulamada size sorulan matematik sorularını çözüp doğru cevabı bulduğunuzda doğru cevabı bulmaca içinden bulup işeretleyin ve puanları toplayın.";
+  final String onboardTitle2 = "Görsel Zeka";
   final String onboardDescription2 =
-      "Bu bir denemedir yağlı şaka ünlü  çabuk consectetur ut lectus velit feugiat eleifend eget.Lorem ipsum dolor sit amet consectetur. Egestas ut lectus velit eget.";
-  final String onboardTitle3 = "Lorem baslık";
+      "Sorulan sorularda doğru cevabı çözdükten sonra bulmaca içinden ilgili cevabı bulun böylelikle görsel zekanız ve problem çözme yeteneğiniz artsın.";
+  final String onboardTitle3 = "Cevapları İşaretleyin";
   final String onboardDescription3 =
-      'Lorem ipsum dolor sit amet consectetur. Egestas ut lectus velit feugiat eleifend eget.Lorem ipsum dolor sit amet consectetur. Egestas ut lectus velit eget.';
+      'Çözdüğünüz soruların cevaplarını bulmacada işaretleyin böylelikle tüm bulmacayı çözmüş ve parçaları birleştirmiş olacaksınız. Sonraki sorular daha zevkli... :)';
 }
