@@ -20,79 +20,77 @@ class OnboardingView extends StatefulWidget {
 }
 
 class _OnboardingViewState extends BaseState<OnboardingView> {
-
-
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                width: 100.w,
-                child: BlocBuilder<OnboardingCubit, OnboardingState>(
-                  builder: (context, state) {
-                    return Row(
-                      mainAxisAlignment: state.currentIndex == 1 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        state.currentIndex == 0 ? const SizedBox.shrink() : _buildOnboardBackgroundImage(svgConstants.onboard2Background, 1, false),
-                        state.currentIndex == 2
-                            ? _buildOnboardBackgroundImage(svgConstants.onboard3Background, 2, false)
-                            : Padding(
-                                padding: EdgeInsets.only(top: 5.h),
-                                child: _buildSkipButton(),
-                              )
-                      ],
-                    );
-                  },
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [DynamicVerticalSpace(height: 6.h), _buildOnboardItems(context)],
-              ),
-              BlocBuilder<OnboardingCubit, OnboardingState>(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              width: 100.w,
+              child: BlocBuilder<OnboardingCubit, OnboardingState>(
                 builder: (context, state) {
-                  return SizedBox(
-                    height: ResponsivitiveManager.instance.isMobile(context)
-                        ? 25.h
-                        : state.currentIndex == 2
-                            ? 25.h
-                            : 19.h,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                            height: 6.h,
-                            width: 100.w,
-                            child: Align(
-                              child: (state.currentIndex == context.read<OnboardingCubit>().onboardModelList.length - 1)
-                                  ? _buildLoginButton()
-                                  : _buildCircleIndicator(context),
-                            )),
-                        BlocBuilder<OnboardingCubit, OnboardingState>(
-                          builder: (context, state) {
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: state.currentIndex == 0 ? MainAxisAlignment.end : MainAxisAlignment.center,
-                              children: [
-                                _buildOnboardBackgroundImage(svgConstants.onboard33Background, 2, true),
-                                _buildOnboardBackgroundImage(svgConstants.onboard1Background, 0, false),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                  return Row(
+                    mainAxisAlignment: state.currentIndex == 1 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      state.currentIndex == 0 ? const SizedBox.shrink() : _buildOnboardBackgroundImage(svgConstants.onboard2Background, 1, false),
+                      state.currentIndex == 2
+                          ? _buildOnboardBackgroundImage(svgConstants.onboard3Background, 2, false)
+                          : Padding(
+                              padding: EdgeInsets.only(top: 5.h),
+                              child: _buildSkipButton(),
+                            )
+                    ],
                   );
                 },
               ),
-            ],
-          ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [DynamicVerticalSpace(height: 6.h), _buildOnboardItems(context)],
+            ),
+            BlocBuilder<OnboardingCubit, OnboardingState>(
+              builder: (context, state) {
+                return SizedBox(
+                  height: ResponsivitiveManager.instance.isMobile(context)
+                      ? 25.h
+                      : state.currentIndex == 2
+                          ? 25.h
+                          : 19.h,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                          height: 6.h,
+                          width: 100.w,
+                          child: Align(
+                            child: (state.currentIndex == context.read<OnboardingCubit>().onboardModelList.length - 1)
+                                ? _buildLoginButton()
+                                : _buildCircleIndicator(context),
+                          )),
+                      BlocBuilder<OnboardingCubit, OnboardingState>(
+                        builder: (context, state) {
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: state.currentIndex == 0 ? MainAxisAlignment.end : MainAxisAlignment.center,
+                            children: [
+                              _buildOnboardBackgroundImage(svgConstants.onboard33Background, 2, true),
+                              _buildOnboardBackgroundImage(svgConstants.onboard1Background, 0, false),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-      );
+      ),
+    );
   }
 
   Align _buildSkipButton() {
@@ -136,7 +134,7 @@ class _OnboardingViewState extends BaseState<OnboardingView> {
           itemBuilder: ((context, index) {
             return Column(
               children: [
-                SvgPicture.asset(
+                Image.asset(
                   context.read<OnboardingCubit>().onboardModelList[index].imagePath,
                   height: 30.h,
                   width: 50.w,
@@ -144,7 +142,7 @@ class _OnboardingViewState extends BaseState<OnboardingView> {
                 DynamicVerticalSpace(height: 7.h),
                 Text(
                   context.read<OnboardingCubit>().onboardModelList[index].title,
-                  style: TextStyle(fontFamily: fontsConstants.AVENIR_BLACK, fontSize: 19.sp, color: const Color(0XFF252525)),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19.sp, color: const Color(0XFF252525)),
                 ),
                 DynamicVerticalSpace(height: 2.h),
                 Padding(
@@ -164,18 +162,20 @@ class _OnboardingViewState extends BaseState<OnboardingView> {
   SizedBox _buildLoginButton() {
     return Platform.isIOS
         ? SizedBox(
-            width: 50.w,
+            width: 70.w,
+            height: 30.h,
             child: CupertinoButton.filled(
               borderRadius: BorderRadius.all(Radius.circular(2.5.h)),
               onPressed: () => context.read<OnboardingCubit>().navigateToLoginView(context),
               child: Text(
-                'LOGIN',
-                style: TextStyle(fontSize: 10.sp, fontFamily: fontsConstants.AVENIR_MEDIUM),
+                'OYUNA BAŞLA',
+                style: TextStyle(fontSize: 15.sp, fontFamily: fontsConstants.AVENIR_MEDIUM),
               ),
             ),
           )
         : SizedBox(
-            width: 50.w,
+            width: 70.w,
+            height: 30.h,
             child: ElevatedButton(
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
@@ -189,8 +189,8 @@ class _OnboardingViewState extends BaseState<OnboardingView> {
               ),
               onPressed: () => context.read<OnboardingCubit>().navigateToLoginView(context),
               child: Text(
-                'LOGIN',
-                style: TextStyle(fontSize: 10.sp, fontFamily: fontsConstants.AVENIR_MEDIUM),
+                'OYUNA BAŞLA',
+                style: TextStyle(fontSize: 15.sp, fontFamily: fontsConstants.AVENIR_MEDIUM),
               ),
             ),
           );
