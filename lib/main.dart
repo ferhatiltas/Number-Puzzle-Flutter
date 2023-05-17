@@ -12,7 +12,7 @@ void main() async {
   await appInitialize.setup();
   runApp(MultiProvider(
     providers: ProductContext().items,
-    child: _MyApp(),
+    child: const _MyApp(),
   ));
 }
 
