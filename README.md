@@ -1,11 +1,24 @@
+<h1 align="left">🧩 YMGK Number Puzzle 🧮 </h1>
+
+
+
+<h3 align="left">
+   :dart: About : 
+  E-market application that works on both android and ios platforms. 
+</h3>
+
+Download APK for Android
+:-------------------------:
+To test the application, click the here and download the apk.
+[<img src="https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_485,h_161/https://boostapk.com/wp-content/uploads/2020/08/fall-guys-android.png" width="350" >](https://github.com/ferhatiltas/Number-Puzzle-Flutter/blob/main/app-debug.apk)
+  
+  
+
+
 
 Number Puzzle Movie
 :-------------------------:
 ![original-design](https://github.com/ferhatiltas/Number-Puzzle-Flutter/blob/main/project_movie.gif)
-
-
-
-
 
 ## :rocket: Technologies ##
 
